@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Organizer</title>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            background: #0a0a0a;
+            color: #00ffcc; 
+            overflow: hidden;
+            height: 100vh;
+            animation: backgroundShift 20s infinite linear;
+        }
+
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InRyYW5zcGFyZW50Ii8+PGxpbmUgeDE9IjAiIHkxPSIzMCUiIHgyPSIxMDAlIiB5Mj0iMzAlIiBzdHJva2U9InJnYmEoMCwgMjU1LCAyMDAsIDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjxsaW5lIHgxPSIwIiB5MT0iNjAlIiB4Mj0iMTAwJSIgeTI9IjYwJSIgc3Ryb2tlPSJyZ2JhKDAsIDI1NSwgMjAwLCAwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48Y2lyY2xlIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjQwJSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsIDI1NSwgMjAwLCAwLjIpIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=') repeat,
+                        radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.15), transparent 70%);
+            opacity: 0.6;
+            animation: circuitFlow 15s infinite linear;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 50px auto;
+            padding: 40px;
+            background: rgba(10, 10, 10, 0.85);
+            border: 3px solid #00ffcc;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.8), inset 0 0 15px rgba(0, 255, 204, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 204, 0.2), transparent);
+            animation: rotateGlow 8s infinite linear;
+            z-index: -1;
+        }
+
+        h2 {
+            color: #00ffcc;
+            text-shadow: 0 0 20px #00ffcc, 0 0 40px #0088aa;
+            font-size: 3em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: flicker 4s infinite;
+        }
+
+        #log {
+            width: 100%;
+            height: 300px;
+            margin: 25px auto;
+            padding: 20px;
+            border: 2px solid #00ffcc;
+            background: rgba(0, 0, 0, 0.95);
+            color: #00ffcc;
+            border-radius: 12px;
+            box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.6);
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            text-align: left;
+            transition: all 0.5s ease;
+        }
+
+        button {
+            padding: 18px 35px;
+            margin-top: 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #00ffcc, #0088aa);
+            border: 2px solid #00ffcc;
+            color: #000;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            text-transform: uppercase;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.7);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #0088aa, #00ffcc);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 1), 0 0 50px rgba(0, 136, 170, 0.8);
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: inset 0 0 12px rgba(0, 255, 204, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 1), inset 0 0 15px rgba(0, 255, 204, 0.6);
+            border-color: #0088aa;
+            transform: scale(1.02);
+        }
+
+        input[type="text"]::placeholder {
+            color: #00b3b3;
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes backgroundShift {
+            0% { background-position: 0 0; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0 0; }
+        }
+
+        @keyframes circuitFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; }
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+            25%, 75% { opacity: 0.95; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>File Organizer</h2>
+        <input type="text" id="directoryInput" placeholder="Enter directory path (e.g., /home/user/files)">
+        <button onclick="organizeFiles()">Activate Protocol</button>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        async function organizeFiles() {
+            const dirInput = document.getElementById("directoryInput");
+            const logDiv = document.getElementById("log");
+
+            if (!dirInput.value.trim()) {
+                logDiv.innerHTML = "Error: No directory path detected.";
+                logDiv.style.color = "#ff5555";
+                return;
+            }
+
+            logDiv.innerHTML = "Initializing file organization protocol...";
+
+            try {
+                const response = await fetch("http://localhost:5000/organize", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ directory: dirInput.value.trim() }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    logDiv.innerHTML = data.message;
+                    logDiv.style.color = "#00ffcc";
+                } else {
+                    logDiv.innerHTML = data.message || "System failure detected.";
+                    logDiv.style.color = "#ff5555";
+                }
+            } catch (error) {
+                logDiv.innerHTML = `Critical Error: ${error.message}`;
+                logDiv.style.color = "#ff5555";
+            }
+        }
+    </script>
+</body>
+</html>
